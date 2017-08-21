@@ -7,7 +7,7 @@ public class App {
 
 	public static void main(String[] args) {
 		
-		ApplicationContext context = new ClassPathXmlApplicationContext("beans06.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("beans05.xml");
 		
 		Robot robot = (Robot)context.getBean("robot");
 		
