@@ -1,4 +1,4 @@
-package ru.alexraydev.javaspring;
+package ru.alexraydev.javaspring02;
 
 public class Person {
 	

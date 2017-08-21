@@ -6,7 +6,7 @@
 	default-init-method="init" default-destroy-method="destroy">
 
 
-	<bean id="person" class="ru.alexraydev.javaspring.Person"
+	<!--<bean id="person" class="ru.alexraydev.javaspring0202.Person"
           init-method="onCreate"
           destroy-method="onDestroy"
           factory-method="getInstance">
@@ -16,7 +16,7 @@
 		<property name="address" ref="address"/>
 	</bean>
 	
-	<bean id="person2" class="ru.alexraydev.javaspring.Person"
+	<bean id="person2" class="ru.alexraydev.javaspring0202.Person"
           init-method="onCreate"
           destroy-method="onDestroy"
 		  factory-method="createPerson" factory-bean="personfactory">
@@ -26,15 +26,27 @@
 		<property name="address" ref="address"/>
 	</bean>
 
-	<bean id="address" class="ru.alexraydev.javaspring.Address">
+	<bean id="address" class="ru.alexraydev.javaspring0202.Address">
 		<constructor-arg type="java.lang.String" value="1 Church Lane"/>
 		<constructor-arg type="java.lang.String" value="9876"/>
 	</bean>
 
-    <bean id="address2" class="ru.alexraydev.javaspring.Address"
+    <bean id="address2" class="ru.alexraydev.javaspring0202.Address"
           p:street="23 Vinyard Lane" p:postcode="6789"/>
 
 	<bean id="personfactory"
-		class="ru.alexraydev.javaspring.PersonFactory">
-	</bean>
+		class="ru.alexraydev.javaspring0202.PersonFactory">
+	</bean>-->
+
+    <bean id="basket" class="ru.alexraydev.javaspring02.FruitBasket">
+        <constructor-arg value="Alex's basket"/>
+        <constructor-arg>
+            <map>
+                <entry key="1" value="Apple"/>
+                <entry key="2" value="Banana"/>
+                <entry key="3" value="Orange"/>
+            </map>
+        </constructor-arg>
+
+    </bean>
 </beans>
