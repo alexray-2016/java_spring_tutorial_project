@@ -1,69 +1,80 @@
 package ru.alexraydev.javaspring07.dao;
 
+import ru.alexraydev.javaspring07.validation.ValidEmail;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public class Offer {
-
-    private int id;
-    private String name;
+	private int id;
+	
+	@Size(min=5, max=100, message="Name must be between 5 and 100 characters.")
+	private String name;
+	
+	@NotNull
+	@ValidEmail
     private String email;
-    private String text;
+	
+	@Size(min=5, max=100, message="Text must be between 20 and 255 characters.")
+	private String text;
+	
+	public Offer() {
+		
+	}
 
-    public Offer() {
+	public Offer(String name, String email, String text) {
+		this.name = name;
+		this.email = email;
+		this.text = text;
+	}
+	
+	
 
-    }
+	public Offer(int id, String name, String email, String text) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.email = email;
+		this.text = text;
+	}
 
-    public Offer(String name, String email, String text) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.text = text;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public Offer(int id, String name, String email, String text) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.text = text;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public int getId() {
-        return id;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getText() {
+		return text;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setText(String text) {
+		this.text = text;
+	}
 
-    public String getText() {
-        return text;
-    }
+	@Override
+	public String toString() {
+		return "Offer [id=" + id + ", name=" + name + ", email=" + email
+				+ ", text=" + text + "]";
+	}
 
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    @Override
-    public String toString() {
-        return "Offer{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", text='" + text + '\'' +
-                '}';
-    }
 }

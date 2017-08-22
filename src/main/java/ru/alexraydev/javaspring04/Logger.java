@@ -11,8 +11,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 @Component
 public class Logger {
@@ -20,12 +18,12 @@ public class Logger {
 	private ConsoleWriter consoleWriter;
 	private LogWriter fileWriter;
 
-    @Resource
+    //@Autowired
 	public void setConsoleWriter(ConsoleWriter writer) {
 		this.consoleWriter = writer;
 	}
 
-    @Resource(name = "fileWriter")
+    //@Autowired
 	public void setFileWriter(LogWriter fileWriter) {
 		this.fileWriter = fileWriter;
 	}
