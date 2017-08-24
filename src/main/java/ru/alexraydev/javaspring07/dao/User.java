@@ -79,7 +79,28 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+
+        if (enabled != user.enabled) return false;
+        if (!authority.equals(user.authority)) return false;
+        if (!email.equals(user.email)) return false;
+        if (!username.equals(user.username)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = username.hashCode();
+        result = 31 * result + email.hashCode();
+        result = 31 * result + (enabled ? 1 : 0);
+        result = 31 * result + authority.hashCode();
+        return result;
+    }
 }
