@@ -33,9 +33,17 @@ public class OffersController {
 		System.out.println("Id is: " + id);
 		return "home";
 	}
+	
+	/*
+	@ExceptionHandler(DataAccessException.class)
+	public String handleDatabaseException(DataAccessException ex) {
+		return "error";
+	*/
 
 	@RequestMapping("/offers")
 	public String showOffers(Model model) {
+		
+		//offersService.throwTestException();
 		
 		List<Offer> offers = offersService.getCurrent();
 		
@@ -46,7 +54,9 @@ public class OffersController {
 	
 	@RequestMapping("/createoffer")
 	public String createOffer(Model model) {
-	    model.addAttribute("offer", new Offer());
+	
+		model.addAttribute("offer", new Offer());
+		
 		return "createoffer";
 	}
 	
@@ -54,10 +64,10 @@ public class OffersController {
 	public String doCreate(Model model, @Valid Offer offer, BindingResult result) {
 		
 		if(result.hasErrors()) {
-            return "createoffer";
+			return "createoffer";
 		}
-
-        offersService.createOffer(offer);
+		
+		offersService.createOffer(offer);
 		
 		return "offercreated";
 	}

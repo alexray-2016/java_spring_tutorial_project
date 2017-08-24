@@ -1,22 +1,24 @@
 package ru.alexraydev.javaspring07.dao;
 
-import ru.alexraydev.javaspring07.validation.ValidEmail;
-
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import ru.alexraydev.javaspring07.validation.ValidEmail;
+
 public class Offer {
 	private int id;
 	
-	@Size(min=5, max=100, message="Name must be between 5 and 100 characters.")
+	@Size(min=5, max=100)
 	private String name;
 	
 	@NotNull
-	@ValidEmail
-    private String email;
+	@ValidEmail(min=6)
+	private String email;
 	
-	@Size(min=5, max=100, message="Text must be between 20 and 255 characters.")
+	@Size(min=5, max=255)
 	private String text;
 	
 	public Offer() {

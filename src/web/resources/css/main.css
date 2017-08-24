@@ -1,12 +1,12 @@
 @CHARSET "US-ASCII";
 
 .formtable {
-	width: 400px;
+	width: 600px;
 	padding: 10px;
 	border: 1px solid blue;
 }
 
-input[type=text] {
+input[type=password] {
 	width: 250px;
 	
 }
@@ -28,5 +28,15 @@ textarea {
 .error {
     font-size: small;
     color: red;
+    margin-left: 10px;
+}
+
+p.error {
+    font-size: medium;
+}
+
+.valid {
+    font-size: small;
+    color: green;
     margin-left: 10px;
 }
