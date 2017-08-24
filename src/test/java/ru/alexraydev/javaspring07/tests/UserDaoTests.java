@@ -49,6 +49,6 @@ public class UserDaoTests {
 
         assertTrue("User should exist", usersDao.exists(user.getUsername()));
 
-        assertEquals("Created user should be identical to retrieved", user, users.get(0));
+        assertEquals("Created user must be identical to retrieved", user, users.get(0));
     }
 }
