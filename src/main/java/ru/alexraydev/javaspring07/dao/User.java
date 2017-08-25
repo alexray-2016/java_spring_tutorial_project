@@ -24,16 +24,21 @@ public class User {
 	private String email;
 	
 	private boolean enabled = false;
+
 	private String authority;
-	
+
+    @NotBlank
+    @Size(min=8, max=60)
+    private String name;
 	
 	public User() {
 		
 	}
 
-	public User(String username, String password, String email, boolean enabled,
+	public User(String username, String name, String password, String email, boolean enabled,
 			String authority) {
 		this.username = username;
+        this.name = name;
 		this.password = password;
 		this.email = email;
 		this.enabled = enabled;
@@ -80,6 +85,14 @@ public class User {
 		this.email = email;
 	}
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,6 +103,7 @@ public class User {
         if (enabled != user.enabled) return false;
         if (!authority.equals(user.authority)) return false;
         if (!email.equals(user.email)) return false;
+        if (!name.equals(user.name)) return false;
         if (!username.equals(user.username)) return false;
 
         return true;
@@ -101,6 +115,18 @@ public class User {
         result = 31 * result + email.hashCode();
         result = 31 * result + (enabled ? 1 : 0);
         result = 31 * result + authority.hashCode();
+        result = 31 * result + name.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", enabled=" + enabled +
+                ", name='" + name + '\'' +
+                ", authority='" + authority + '\'' +
+                '}';
     }
 }
