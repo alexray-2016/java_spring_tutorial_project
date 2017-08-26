@@ -13,9 +13,11 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import ru.alexraydev.javaspring07.validation.ValidEmail;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name="users")
-public class User {
+public class User implements Serializable{
 	
 	@NotBlank(groups={PersistenceValidationGroup.class, FormValidationGroup.class})
 	@Size(min=8, max=15, groups={PersistenceValidationGroup.class, FormValidationGroup.class})
