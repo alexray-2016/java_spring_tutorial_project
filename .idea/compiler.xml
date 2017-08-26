@@ -26,5 +26,8 @@
         <module name="java_spring_tutorial_project" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="java_spring_tutorial_project" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>

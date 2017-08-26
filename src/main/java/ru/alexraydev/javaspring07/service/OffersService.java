@@ -7,15 +7,15 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 
 import ru.alexraydev.javaspring07.dao.Offer;
-import ru.alexraydev.javaspring07.dao.OffersDAO;
+import ru.alexraydev.javaspring07.dao.OffersDao;
 
 @Service("offersService")
 public class OffersService {
-	
-	private OffersDAO offersDao;
-	
+
+	private OffersDao offersDao;
+
 	@Autowired
-	public void setOffersDao(OffersDAO offersDao) {
+	public void setOffersDao(OffersDao offersDao) {
 		this.offersDao = offersDao;
 	}
 
@@ -23,43 +23,46 @@ public class OffersService {
 		return offersDao.getOffers();
 	}
 
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public void createOffer(Offer offer) {
-        offersDao.create(offer);
-    }
+	@Secured({ "ROLE_USER", "ROLE_ADMIN" })
+	public void create(Offer offer) {
+		offersDao.saveOrUpdate(offer);
+	}
 
-    public boolean hasOffer(String name) {
+	public boolean hasOffer(String name) {
 
-        if (name == null) return false;
+		if (name == null) {
+			return false;
+		}
 
-        List<Offer> offers = offersDao.getOffers(name);
+		List<Offer> offers = offersDao.getOffers(name);
 
-        if (offers.size() == 0) {
-            return false;
-        }
+		if (offers.size() == 0) {
+			return false;
+		}
 
-        return true;
-    }
+		return true;
+	}
 
-    public Offer getOffer(String username) {
+	public Offer getOffer(String username) {
 
-        if (username == null) return null;
+		if (username == null) {
+			return null;
+		}
 
-        List<Offer> offers = offersDao.getOffers(username);
+		List<Offer> offers = offersDao.getOffers(username);
 
-        if (offers.size() == 0) {
-            return null;
-        }
+		if (offers.size() == 0) {
+			return null;
+		}
 
-        return offers.get(0);
-    }
+		return offers.get(0);
+	}
 
-    public void saveOrUpdateOffer(Offer offer) {
-        if (offer.getId() != 0) {
-            offersDao.update(offer);
-        }
-        else {
-            offersDao.create(offer);
-        }
-    }
+	public void saveOrUpdate(Offer offer) {
+		offersDao.saveOrUpdate(offer);
+	}
+
+	public void delete(int id) {
+		offersDao.delete(id);
+	}
 }

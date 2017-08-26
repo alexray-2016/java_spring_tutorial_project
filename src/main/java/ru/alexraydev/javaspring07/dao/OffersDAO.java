@@ -1,76 +1,73 @@
 package ru.alexraydev.javaspring07.dao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
+@Transactional
 @Component("offersDao")
-public class OffersDAO {
+public class OffersDao {
 
-	private NamedParameterJdbcTemplate jdbc;
-	
 	@Autowired
-	public void setDataSource(DataSource jdbc) {
-		this.jdbc = new NamedParameterJdbcTemplate(jdbc);
+	private SessionFactory sessionFactory;
+
+	public Session session() {
+		return sessionFactory.getCurrentSession();
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Offer> getOffers() {
+		Criteria crit = session().createCriteria(Offer.class);
 
-        return jdbc.query("select * from offers, users where offers.username=users.username and users.enabled=true", new OfferRowMapper());
-    }
+		crit.createAlias("user", "u").add(Restrictions.eq("u.enabled", true));
 
-    public List<Offer> getOffers(String username) {
+		return crit.list();
+	}
 
-        return jdbc.query("select * from offers, users where offers.username=users.username and users.enabled=true and offers.username=:username",
-                new MapSqlParameterSource("username", username),
-                new OfferRowMapper());
-    }
-	
-	public boolean update(Offer offer) {
-		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
+	@SuppressWarnings("unchecked")
+	public List<Offer> getOffers(String username) {
+		Criteria crit = session().createCriteria(Offer.class);
+
+		crit.createAlias("user", "u");
 		
-		return jdbc.update("update offers set text=:text where id=:id", params) == 1;
+		crit.add(Restrictions.eq("u.enabled", true));
+		crit.add(Restrictions.eq("u.username", username));
+
+		return crit.list();
 	}
-	
-	public boolean create(Offer offer) {
-		
-		BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(offer);
-		
-		return jdbc.update("insert into offers (username, text) values (:username, :text)", params) == 1;
+
+	public void saveOrUpdate(Offer offer) {
+		session().saveOrUpdate(offer);
 	}
-	
-	@Transactional
-	public int[] create(List<Offer> offers) {
-		
-		SqlParameterSource[] params = SqlParameterSourceUtils.createBatch(offers.toArray());
-		
-		return jdbc.batchUpdate("insert into offers (username, text) values (:username, :text)", params);
-	}
-	
+
 	public boolean delete(int id) {
-		MapSqlParameterSource params = new MapSqlParameterSource("id", id);
-		
-		return jdbc.update("delete from offers where id=:id", params) == 1;
+		Query query = session().createQuery("delete from Offer where id=:id");
+		query.setLong("id", id);
+		return query.executeUpdate() == 1;
 	}
 
 	public Offer getOffer(int id) {
+		Criteria crit = session().createCriteria(Offer.class);
 
-		MapSqlParameterSource params = new MapSqlParameterSource();
-		params.addValue("id", id);
+		crit.createAlias("user", "u");
+		
+		crit.add(Restrictions.eq("u.enabled", true));
+		crit.add(Restrictions.idEq(id));
 
-		return jdbc.queryForObject("select * from offers, users offers.username=users.username and users.enabled=true and id=:id", params, new OfferRowMapper());
+		return (Offer)crit.uniqueResult();
 	}
-	
+
 }

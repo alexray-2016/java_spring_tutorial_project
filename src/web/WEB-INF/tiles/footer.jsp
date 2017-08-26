@@ -1,1 +1,1 @@
-Created by Alexander Semenov
+Created by John W Purcell http://www.caveofprogramming.com

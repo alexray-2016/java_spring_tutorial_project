@@ -1,5 +1,10 @@
 package ru.alexraydev.javaspring07.dao;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -8,28 +13,32 @@ import org.hibernate.validator.constraints.NotBlank;
 
 import ru.alexraydev.javaspring07.validation.ValidEmail;
 
+@Entity
+@Table(name="users")
 public class User {
 	
-	@NotBlank
-	@Size(min=8, max=15)
-	@Pattern(regexp="^\\w{8,}$")
+	@NotBlank(groups={PersistenceValidationGroup.class, FormValidationGroup.class})
+	@Size(min=8, max=15, groups={PersistenceValidationGroup.class, FormValidationGroup.class})
+	@Pattern(regexp="^\\w{8,}$", groups={PersistenceValidationGroup.class, FormValidationGroup.class})
+	@Id
+	@Column(name="username")
 	private String username;
 	
-	@NotBlank
-	@Pattern(regexp="^\\S+$")
-	@Size(min=8, max=15)
+	@NotBlank(groups={PersistenceValidationGroup.class, FormValidationGroup.class})
+	@Pattern(regexp="^\\S+$", groups={PersistenceValidationGroup.class, FormValidationGroup.class})
+	@Size(min=8, max=15, groups={FormValidationGroup.class})
 	private String password;
 	
-	@ValidEmail
+	@ValidEmail(groups={PersistenceValidationGroup.class, FormValidationGroup.class})
 	private String email;
 	
+	@NotBlank(groups={PersistenceValidationGroup.class, FormValidationGroup.class})
+	@Size(min=8, max=60, groups={PersistenceValidationGroup.class, FormValidationGroup.class})
+	private String name;
+	
 	private boolean enabled = false;
-
 	private String authority;
-
-    @NotBlank
-    @Size(min=8, max=60)
-    private String name;
+	
 	
 	public User() {
 		
@@ -38,7 +47,7 @@ public class User {
 	public User(String username, String name, String password, String email, boolean enabled,
 			String authority) {
 		this.username = username;
-        this.name = name;
+		this.name = name;
 		this.password = password;
 		this.email = email;
 		this.enabled = enabled;
@@ -85,48 +94,70 @@ public class User {
 		this.email = email;
 	}
 
-    public String getName() {
-        return name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((authority == null) ? 0 : authority.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + (enabled ? 1231 : 1237);
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result
+				+ ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
 
-        User user = (User) o;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (authority == null) {
+			if (other.authority != null)
+				return false;
+		} else if (!authority.equals(other.authority))
+			return false;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (enabled != other.enabled)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
+	}
 
-        if (enabled != user.enabled) return false;
-        if (!authority.equals(user.authority)) return false;
-        if (!email.equals(user.email)) return false;
-        if (!name.equals(user.name)) return false;
-        if (!username.equals(user.username)) return false;
+	@Override
+	public String toString() {
+		return "User [username=" + username + ", email=" + email + ", name="
+				+ name + ", enabled=" + enabled + ", authority=" + authority
+				+ "]";
+	}
 
-        return true;
-    }
+	
+	
 
-    @Override
-    public int hashCode() {
-        int result = username.hashCode();
-        result = 31 * result + email.hashCode();
-        result = 31 * result + (enabled ? 1 : 0);
-        result = 31 * result + authority.hashCode();
-        result = 31 * result + name.hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", enabled=" + enabled +
-                ", name='" + name + '\'' +
-                ", authority='" + authority + '\'' +
-                '}';
-    }
 }

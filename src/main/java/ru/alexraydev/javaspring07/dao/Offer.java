@@ -1,21 +1,29 @@
 package ru.alexraydev.javaspring07.dao;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.NotBlank;
-
-import ru.alexraydev.javaspring07.validation.ValidEmail;
-
+@Entity
+@Table(name="offers")
 public class Offer {
+
+	@Id
+	@GeneratedValue
 	private int id;
-
 	
-	@Size(min=5, max=255)
+	@Size(min=5, max=255, groups={PersistenceValidationGroup.class, FormValidationGroup.class})
+	@Column(name="text")
 	private String text;
-
-    private User user;
+	
+	@ManyToOne
+	@JoinColumn(name="username")
+	private User user;
 	
 	public Offer() {
 		this.user = new User();
@@ -23,14 +31,12 @@ public class Offer {
 
 	public Offer(User user, String text) {
 		this.user = user;
-        this.text = text;
+		this.text = text;
 	}
-	
-	
 
-	public Offer(int id, String text) {
+	public Offer(int id, User user, String text) {
 		this.id = id;
-        this.user = user;
+		this.user = user;
 		this.text = text;
 	}
 
@@ -50,44 +56,56 @@ public class Offer {
 		this.text = text;
 	}
 
-    public String getUsername() {
-        return user.getUsername();
-    }
+	public User getUser() {
+		return user;
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public String getUsername() {
+		return user.getUsername();
+	}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((text == null) ? 0 : text.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Offer)) return false;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Offer other = (Offer) obj;
+		if (text == null) {
+			if (other.text != null)
+				return false;
+		} else if (!text.equals(other.text))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
+	}
 
-        Offer offer = (Offer) o;
+	@Override
+	public String toString() {
+		return "Offer [id=" + id + ", text=" + text + ", user=" + user + "]";
+	}
 
-        if (!text.equals(offer.text)) return false;
-        if (!user.equals(offer.user)) return false;
 
-        return true;
-    }
+	
+	
 
-    @Override
-    public int hashCode() {
-        int result = text.hashCode();
-        result = 31 * result + user.hashCode();
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Offer{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                ", user=" + user +
-                '}';
-    }
 }
