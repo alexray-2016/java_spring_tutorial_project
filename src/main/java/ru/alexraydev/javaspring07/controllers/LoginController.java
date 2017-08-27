@@ -1,20 +1,28 @@
 package ru.alexraydev.javaspring07.controllers;
 
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import org.springframework.web.bind.annotation.ResponseBody;
 import ru.alexraydev.javaspring07.dao.FormValidationGroup;
+import ru.alexraydev.javaspring07.dao.Message;
 import ru.alexraydev.javaspring07.dao.User;
 import ru.alexraydev.javaspring07.service.UsersService;
 
@@ -34,9 +42,14 @@ public class LoginController {
 	}
 	
 	@RequestMapping("/denied")
-	public String showDenied() {
-		return "denied";
-	}
+     public String showDenied() {
+        return "denied";
+    }
+
+    @RequestMapping("/messages")
+    public String showMessages() {
+        return "messages";
+    }
 	
 	@RequestMapping("/admin")
 	public String showAdmin(Model model) {
@@ -86,4 +99,41 @@ public class LoginController {
 		
 		return "accountcreated";
 	}
+
+    @RequestMapping(value = "/getmessages", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+     @ResponseBody
+     public Map<String, Object> getMessages(Principal principal) {
+        List<Message> messages = null;
+        if (principal == null) {
+            messages = new ArrayList<>();
+        }
+        else {
+            String username = principal.getName();
+            messages = usersService.getMessages(username);
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("messages", messages);
+        data.put("number", messages.size());
+
+        return data;
+    }
+
+    @RequestMapping(value = "/sendmessage", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Map<String, Object> sendMessage(Principal principal, @RequestBody Map<String, Object> data) {
+
+        String text = (String)data.get("text");
+        String name = (String)data.get("name");
+        String email = (String)data.get("email");;
+        Integer target = (Integer)data.get("target");
+
+        System.out.println();
+
+        Map<String, Object> rval = new HashMap<>();
+        rval.put("success", true);
+        rval.put("target", target);
+
+        return rval;
+    }
 }

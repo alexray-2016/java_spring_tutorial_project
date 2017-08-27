@@ -88,6 +88,8 @@
           <element id="library" level="project" name="Maven: org.springframework.webflow:spring-js-resources:2.3.2.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.webflow:spring-js:2.3.2.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.webflow:spring-webflow:2.3.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.13" />
         </element>
       </element>
     </root>

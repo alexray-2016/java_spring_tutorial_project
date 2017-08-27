@@ -41,4 +41,8 @@ public class UsersService {
 	public List<User> getAllUsers() {
 		return usersDao.getAllUsers();
 	}
+
+    public List<Message> getMessages(String username) {
+        return messagesDao.getMessages(username);
+    }
 }
